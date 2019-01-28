@@ -1,27 +1,35 @@
 import React, { Component } from 'react';
 import './App.css';
-import UserInput from './Input-Output/UserInput';
-import UserOutput from './Input-Output/UserOutput';
+import ValidationComponent from "./ValidationComponent";
+import CharComponent from './CharComponent';
 
 class App extends Component {
   state = {
-    userName: "State UN"
+    userName: "String"
   }
   stateChangeHandler = (event) => {
     this.setState({
       userName: event.target.value
     })
   }
+  deleteChar = (index) => {
+    const charArray = this.state.userName.split('');
+    charArray.splice(index,1);
+    this.setState({
+      userName: charArray.join('')
+    })
+  }
   render() {
-    const inlineStyle = {
-      background: "white",
-      border: "1px solid black"
-    }
+    const charArray = this.state.userName.split('');
     return (
       <div className="App">
-          <UserInput style={inlineStyle} userName={this.state.userName} eventHandler={this.stateChangeHandler}/>
-          <UserOutput userName={this.state.userName}/>
-          <UserOutput userName="React 2"/>
+          <input type="text" value={this.state.userName} onChange={this.stateChangeHandler} />
+          <ValidationComponent length={this.state.userName.length}/>
+          {
+            charArray.map((char, index) => {
+              return <CharComponent key={index} character={char} deleteCharacter={() => this.deleteChar(index)}/>
+            })
+          }
       </div>
     );
   }
